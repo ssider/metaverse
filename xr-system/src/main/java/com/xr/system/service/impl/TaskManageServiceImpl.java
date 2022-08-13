@@ -3,11 +3,14 @@ package com.xr.system.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.xr.common.utils.DateUtils;
 import com.xr.common.utils.StringUtils;
 import com.xr.common.utils.uuid.IdUtils;
+import io.jsonwebtoken.lang.Collections;
+import io.jsonwebtoken.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xr.system.mapper.TaskManageMapper;
@@ -102,7 +105,42 @@ public class TaskManageServiceImpl implements ITaskManageService {
      */
     @Override
     public int deleteTaskManageByTaskNumbers(String[] taskNumbers) {
-        return taskManageMapper.deleteTaskManageByTaskNumbers(taskNumbers);
+        List<String> numbers = new ArrayList<String>();
+        for (String tnumber : taskNumbers) {
+            numbers.add(tnumber);
+            TaskManage task = new TaskManage();
+            task.setParentNumber(tnumber);
+            List<TaskManage> taskmanages = taskManageMapper.selectTaskManageList(task);
+            if (!Collections.isEmpty(taskmanages)) {
+                List<String> nums = getSubTaskNumbers(taskmanages);
+                numbers.addAll(nums);
+            }
+        }
+        String[] sss = new String[numbers.size()];
+
+        return taskManageMapper.deleteTaskManageByTaskNumbers(numbers.toArray(sss));
+    }
+
+    /**
+     * 批量删除时的查子任务
+     *
+     * @param taskManages 查询子任务的主键
+     * @return 结果
+     */
+    @Override
+    public List<String> getSubTaskNumbers(List<TaskManage> taskManages) {
+        List<String> numbers = new ArrayList<String>();
+        for (TaskManage tnumber : taskManages) {
+            numbers.add(tnumber.getTaskNumber());
+
+            TaskManage task = new TaskManage();
+            task.setParentNumber(tnumber.getTaskNumber());
+            List<TaskManage> taskmanages = taskManageMapper.selectTaskManageList(task);
+            if (!Collections.isEmpty(taskmanages)) {
+                numbers.addAll(getSubTaskNumbers(taskmanages));
+            }
+        }
+        return numbers;
     }
 
     /**

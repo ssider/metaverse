@@ -58,4 +58,12 @@ public interface ITaskManageService {
      * @return 结果
      */
     public int deleteTaskManageByTaskNumber(String taskNumber);
+
+    /**
+     * 批量删除时的查子任务
+     *
+     * @param taskManages 查询子任务的主键
+     * @return 结果
+     */
+    public List<String> getSubTaskNumbers(List<TaskManage> taskManages);
 }

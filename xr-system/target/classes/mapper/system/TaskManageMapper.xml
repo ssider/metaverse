@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xr.system.mapper.TaskManageMapper">
+
+    <resultMap type="TaskManage" id="TaskManageResult">
+        <result property="taskNumber"    column="task_number"    />
+        <result property="parentNumber"    column="parent_number"    />
+        <result property="projectName"    column="project_Name"    />
+        <result property="projectInfomation"    column="project_infomation"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="sourceSystem"    column="source_system"    />
+        <result property="sourcePath"    column="source_path"    />
+        <result property="targetSystem"    column="target_system"    />
+        <result property="taskProcess"    column="task_process"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="dataSource"    column="data_source"    />
+        <result property="taskContent"    column="task_content"    />
+        <result property="unrealTask"    column="unreal_task"    />
+        <result property="levelDetail"    column="level_detail"    />
+        <result property="view"    column="view"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="modifyTime"    column="modify_time"    />
+    </resultMap>
+
+    <sql id="selectTaskManageVo">
+        select task_number, parent_number, project_Name, project_infomation, task_name, source_system, source_path, target_system, task_process, task_status, data_source, task_content, unreal_task, level_detail, view, create_time, modify_time from task_manage
+    </sql>
+
+    <select id="selectTaskManageList" parameterType="TaskManage" resultMap="TaskManageResult">
+        <include refid="selectTaskManageVo"/>
+        <where>
+            <if test="parentNumber != null  and parentNumber != ''"> and parent_number = #{parentNumber}</if>
+            <if test="projectName != null  and projectName != ''"> and project_Name like concat('%', #{projectName}, '%')</if>
+            <if test="taskNumber != null  and taskNumber != ''"> and task_number like concat('%', #{taskNumber}, '%')</if>
+            <if test="projectInfomation != null  and projectInfomation != ''"> and project_infomation = #{projectInfomation}</if>
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="sourceSystem != null  and sourceSystem != ''"> and source_system = #{sourceSystem}</if>
+            <if test="sourcePath != null  and sourcePath != ''"> and source_path = #{sourcePath}</if>
+            <if test="targetSystem != null  and targetSystem != ''"> and target_system = #{targetSystem}</if>
+            <if test="taskProcess != null "> and task_process = #{taskProcess}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and task_status = #{taskStatus}</if>
+            <if test="dataSource != null  and dataSource != ''"> and data_source = #{dataSource}</if>
+            <if test="taskContent != null  and taskContent != ''"> and task_content = #{taskContent}</if>
+            <if test="unrealTask != null  and unrealTask != ''"> and unreal_task = #{unrealTask}</if>
+            <if test="levelDetail != null "> and level_detail = #{levelDetail}</if>
+            <if test="view != null  and view != ''"> and view = #{view}</if>
+            <if test="modifyTime != null "> and modify_time = #{modifyTime}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        order by parent_number, task_name, modify_time
+    </select>
+
+    <select id="selectTaskManageByTaskNumber" parameterType="String" resultMap="TaskManageResult">
+        <include refid="selectTaskManageVo"/>
+        where task_number = #{taskNumber}
+    </select>
+
+    <insert id="insertTaskManage" parameterType="TaskManage">
+        insert into task_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskNumber != null">task_number,</if>
+            <if test="parentNumber != null and parentNumber != ''">parent_number,</if>
+            <if test="projectName != null">project_Name,</if>
+            <if test="projectInfomation != null">project_infomation,</if>
+            <if test="taskName != null and taskName != ''">task_name,</if>
+            <if test="sourceSystem != null">source_system,</if>
+            <if test="sourcePath != null">source_path,</if>
+            <if test="targetSystem != null">target_system,</if>
+            <if test="taskProcess != null">task_process,</if>
+            <if test="taskStatus != null and taskStatus != ''">task_status,</if>
+            <if test="dataSource != null">data_source,</if>
+            <if test="taskContent != null">task_content,</if>
+            <if test="unrealTask != null">unreal_task,</if>
+            <if test="levelDetail != null">level_detail,</if>
+            <if test="view != null">view,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="modifyTime != null">modify_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskNumber != null">#{taskNumber},</if>
+            <if test="parentNumber != null and parentNumber != ''">#{parentNumber},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectInfomation != null">#{projectInfomation},</if>
+            <if test="taskName != null and taskName != ''">#{taskName},</if>
+            <if test="sourceSystem != null">#{sourceSystem},</if>
+            <if test="sourcePath != null">#{sourcePath},</if>
+            <if test="targetSystem != null">#{targetSystem},</if>
+            <if test="taskProcess != null">#{taskProcess},</if>
+            <if test="taskStatus != null and taskStatus != ''">#{taskStatus},</if>
+            <if test="dataSource != null">#{dataSource},</if>
+            <if test="taskContent != null">#{taskContent},</if>
+            <if test="unrealTask != null">#{unrealTask},</if>
+            <if test="levelDetail != null">#{levelDetail},</if>
+            <if test="view != null">#{view},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="modifyTime != null">#{modifyTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskManage" parameterType="TaskManage">
+        update task_manage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentNumber != null and parentNumber != ''">parent_number = #{parentNumber},</if>
+            <if test="projectName != null">project_Name = #{projectName},</if>
+            <if test="projectInfomation != null">project_infomation = #{projectInfomation},</if>
+            <if test="taskName != null and taskName != ''">task_name = #{taskName},</if>
+            <if test="sourceSystem != null">source_system = #{sourceSystem},</if>
+            <if test="sourcePath != null">source_path = #{sourcePath},</if>
+            <if test="targetSystem != null">target_system = #{targetSystem},</if>
+            <if test="taskProcess != null">task_process = #{taskProcess},</if>
+            <if test="taskStatus != null and taskStatus != ''">task_status = #{taskStatus},</if>
+            <if test="dataSource != null">data_source = #{dataSource},</if>
+            <if test="taskContent != null">task_content = #{taskContent},</if>
+            <if test="unrealTask != null">unreal_task = #{unrealTask},</if>
+            <if test="levelDetail != null">level_detail = #{levelDetail},</if>
+            <if test="view != null">view = #{view},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime},</if>
+        </trim>
+        where task_number = #{taskNumber}
+    </update>
+
+    <delete id="deleteTaskManageByTaskNumber" parameterType="String">
+        delete from task_manage where task_number = #{taskNumber}
+    </delete>
+
+    <delete id="deleteTaskManageByTaskNumbers" parameterType="String">
+        delete from task_manage where task_number in
+        <foreach item="taskNumber" collection="array" open="(" separator="," close=")">
+            #{taskNumber}
+        </foreach>
+    </delete>
+
+    <select id="selectCountTaskManageByParentNumber" parameterType="String">
+        select COUNT(1) from task_manage where parent_number = #{parentNumber}
+    </select>
+
+    <delete id="deleteTaskManageByParentNumber" parameterType="String">
+        delete from task_manage where parent_number = #{parentNumber}
+    </delete>
+
+</mapper>

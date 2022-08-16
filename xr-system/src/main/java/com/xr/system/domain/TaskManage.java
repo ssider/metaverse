@@ -103,8 +103,8 @@ public class TaskManage extends BaseEntity {
     /**
      * 详情百分比
      */
-    @Excel(name = "详情百分比", readConverterExp = "$column.readConverterExp()")
-    private Long levelDetail;
+    @Excel(name = "详情百分比")
+    private String levelDetail;
 
     /**
      * 图片源
@@ -253,11 +253,11 @@ public class TaskManage extends BaseEntity {
         return unrealTask;
     }
 
-    public void setLevelDetail(Long levelDetail) {
+    public void setLevelDetail(String levelDetail) {
         this.levelDetail = levelDetail;
     }
 
-    public Long getLevelDetail() {
+    public String getLevelDetail() {
         return levelDetail;
     }
 

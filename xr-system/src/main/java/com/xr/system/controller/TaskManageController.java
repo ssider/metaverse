@@ -23,6 +23,7 @@ import com.xr.common.utils.poi.ExcelUtil;
 import com.xr.common.core.page.TableDataInfo;
 
 import static com.xr.common.constant.Constants.PARENTNOTFOUND;
+import static com.xr.common.constant.Constants.UNREALTASKERROR;
 
 /**
  * 任务管理Controller
@@ -89,6 +90,8 @@ public class TaskManageController extends BaseController {
         int result = taskManageService.insertTaskManage(taskManage);
         if (result == PARENTNOTFOUND) {
             return error("parent task not exist, please refresh");
+        } else if (result == UNREALTASKERROR) {
+            return error("send and create unrealEngine5 error");
         }
         return toAjax(result);
     }
@@ -110,6 +113,10 @@ public class TaskManageController extends BaseController {
     @Log(title = "任务管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{taskNumbers}")
     public AjaxResult remove(@PathVariable String[] taskNumbers) {
-        return toAjax(taskManageService.deleteTaskManageByTaskNumbers(taskNumbers));
+        int del = taskManageService.deleteTaskManageByTaskNumbers(taskNumbers);
+        if (del == UNREALTASKERROR) {
+            return error("delete unrealEngine5 error");
+        }
+        return toAjax(del);
     }
 }

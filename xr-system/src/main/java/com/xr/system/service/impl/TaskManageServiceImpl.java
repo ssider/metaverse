@@ -3,21 +3,22 @@ package com.xr.system.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.xr.common.utils.DateUtils;
 import com.xr.common.utils.StringUtils;
+import com.xr.common.utils.http.HttpUtils;
 import com.xr.common.utils.uuid.IdUtils;
+import com.xr.system.domain.vo.UnrealEngine5;
 import io.jsonwebtoken.lang.Collections;
-import io.jsonwebtoken.lang.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xr.system.mapper.TaskManageMapper;
 import com.xr.system.domain.TaskManage;
 import com.xr.system.service.ITaskManageService;
 
-import static com.xr.common.constant.Constants.PARENTNOTFOUND;
+import static com.xr.common.constant.Constants.*;
 
 /**
  * 任务管理Service业务层处理
@@ -78,11 +79,43 @@ public class TaskManageServiceImpl implements ITaskManageService {
         if (null == taskManage.getTaskProcess() || taskManage.getTaskProcess() <= 0) {
             taskManage.setTaskProcess(0L);
         }
-        if (null == taskManage.getLevelDetail() || taskManage.getLevelDetail() <= 0) {
-            taskManage.setLevelDetail(0L);
+        if (StringUtils.isEmpty(taskManage.getLevelDetail())) {
+            taskManage.setLevelDetail("30");
         }
         taskManage.setModifyTime(DateUtils.getNowDate());
-        return taskManageMapper.insertTaskManage(taskManage);
+        int ins = taskManageMapper.insertTaskManage(taskManage);
+        if (ins > 0) {
+            UnrealEngine5 unreal = new UnrealEngine5();
+            unreal.setObjectPath(UNREALTASKOBJECTPATH);
+            unreal.setFunctionName(UNREALTASKFUNCTIONNAME);
+            unreal.setFileName(UNREALTASKFUNCTIONNAME);
+            unreal.setFilePath(UNREALTASKOBJECTPATH);
+            unreal.setDetailLevel(taskManage.getLevelDetail());
+            unreal.setGenerateTransaction(UNREALTASKGENERATETRANSACTION_DEFAULT);
+
+
+            String url = UNREALHTTP + "/remote/object/call";
+            String rspStr = HttpUtils.sendPost(url, JSONObject.toJSONString(unreal));
+            if (StringUtils.isEmpty(rspStr)) {
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                System.out.printf("send unreal error {} \n", rspStr.toString());
+                return UNREALTASKERROR;
+            }
+        }
+
+        return ins;
     }
 
     /**
@@ -116,9 +149,26 @@ public class TaskManageServiceImpl implements ITaskManageService {
                 numbers.addAll(nums);
             }
         }
-        String[] sss = new String[numbers.size()];
-
-        return taskManageMapper.deleteTaskManageByTaskNumbers(numbers.toArray(sss));
+        String[] tasknums = new String[numbers.size()];
+        int del = taskManageMapper.deleteTaskManageByTaskNumbers(numbers.toArray(tasknums));
+        if (del > 0) {
+            for (String t : tasknums) {
+                String url = UNREALHTTP + "/unreal/" + t;
+                String rspStr = HttpUtils.sendGet(url);
+                if (StringUtils.isEmpty(rspStr)) {
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                    return UNREALTASKERROR;
+                }
+            }
+        }
+        return del;
     }
 
     /**

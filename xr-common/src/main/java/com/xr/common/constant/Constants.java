@@ -143,4 +143,24 @@ public class Constants {
      * 任务表的父任务ID标记
      */
     public static final int PARENTNOTFOUND = -9;
+    /**
+     * 任务表的父任务ID标记
+     */
+    public static final int UNREALTASKERROR = -8;
+    /**
+     * unreal objectPath
+     */
+    public static final String UNREALTASKOBJECTPATH = "/Game/ThirdPersonBP/Maps/ThirdPersonExampleMap.ThirdPersonExampleMap:PersistentLevel.CubeMesh_5";
+    /**
+     * unreal functionName
+     */
+    public static final String UNREALTASKFUNCTIONNAME = "StartConversionTask";
+    /**
+     * default unreal generateTransaction
+     */
+    public static final Boolean UNREALTASKGENERATETRANSACTION_DEFAULT = false;
+    /**
+     * default unreal generateTransaction
+     */
+    public static final String UNREALHTTP = "http://127.0.0.1:8081/system/manage";
 }

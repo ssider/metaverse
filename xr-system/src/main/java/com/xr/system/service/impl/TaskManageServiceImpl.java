@@ -5,11 +5,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.xr.common.utils.DateUtils;
 import com.xr.common.utils.StringUtils;
 import com.xr.common.utils.http.HttpUtils;
 import com.xr.common.utils.uuid.IdUtils;
+import com.xr.system.domain.vo.TaskNumber;
 import com.xr.system.domain.vo.UnrealEngine5;
 import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,38 +81,65 @@ public class TaskManageServiceImpl implements ITaskManageService {
         if (null == taskManage.getTaskProcess() || taskManage.getTaskProcess() <= 0) {
             taskManage.setTaskProcess(0L);
         }
-        if (StringUtils.isEmpty(taskManage.getLevelDetail())) {
-            taskManage.setLevelDetail("30");
+        if (taskManage.getLevelDetailA() <= 0) {
+            taskManage.setLevelDetailA(30l);
+        }
+        if (taskManage.getLevelDetailB() <= 0) {
+            taskManage.setLevelDetailB(50l);
+        }
+        if (taskManage.getLevelDetailC() <= 0) {
+            taskManage.setLevelDetailC(70l);
         }
         taskManage.setModifyTime(DateUtils.getNowDate());
         int ins = taskManageMapper.insertTaskManage(taskManage);
         if (ins > 0) {
             UnrealEngine5 unreal = new UnrealEngine5();
-            unreal.setObjectPath(UNREALTASKOBJECTPATH);
-            unreal.setFunctionName(UNREALTASKFUNCTIONNAME);
-            unreal.setFileName(UNREALTASKFUNCTIONNAME);
-            unreal.setFilePath(UNREALTASKOBJECTPATH);
-            unreal.setDetailLevel(taskManage.getLevelDetail());
+            TaskNumber t = new TaskNumber();
+            t.setTaskNumber(taskManage.getTaskName());
+            unreal.setParameters(t);
+//            unreal.setObjectPath(UNREALTASKOBJECTPATH);
+//            unreal.setFunctionName(UNREALTASKFUNCTIONNAME);
+            unreal.setFileName("FileName.js");
+            unreal.setFilePath("/home/data/models");
+            String dl = "";
+            if (taskManage.getLevelDetailA() > 0) {
+                dl += taskManage.getLevelDetailA();
+            }
+            if (taskManage.getLevelDetailB() > 0) {
+                if (StringUtils.isEmpty(dl)) {
+                    dl += taskManage.getLevelDetailB();
+                } else {
+                    dl += "," + taskManage.getLevelDetailB();
+                }
+
+            }
+            if (taskManage.getLevelDetailC() > 0) {
+                if (StringUtils.isEmpty(dl)) {
+                    dl += taskManage.getLevelDetailC();
+                } else {
+                    dl += "," + taskManage.getLevelDetailC();
+                }
+
+            }
+            unreal.setDetailLevel(dl);
             unreal.setGenerateTransaction(UNREALTASKGENERATETRANSACTION_DEFAULT);
 
 
             String url = UNREALHTTP + "/remote/object/call";
             String rspStr = HttpUtils.sendPost(url, JSONObject.toJSONString(unreal));
-            if (StringUtils.isEmpty(rspStr)) {
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
-                System.out.printf("send unreal error {} \n", rspStr.toString());
+            JSONObject obj = JSON.parseObject(rspStr);
+            String respCode = obj.getString("code");
+            if (StringUtils.isEmpty(rspStr) || StringUtils.isEmpty(respCode) || !respCode.equals("200")) {
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
                 return UNREALTASKERROR;
             }
         }
@@ -155,15 +184,19 @@ public class TaskManageServiceImpl implements ITaskManageService {
             for (String t : tasknums) {
                 String url = UNREALHTTP + "/unreal/" + t;
                 String rspStr = HttpUtils.sendGet(url);
-                if (StringUtils.isEmpty(rspStr)) {
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
-                    System.out.printf("send delete {} error {} \n", t, rspStr.toString());
+                JSONObject obj = JSON.parseObject(rspStr);
+                String respCode = obj.getString("code");
+                if (StringUtils.isEmpty(rspStr) || StringUtils.isEmpty(respCode) || !respCode.equals("200")) {
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
                     return UNREALTASKERROR;
                 }
             }

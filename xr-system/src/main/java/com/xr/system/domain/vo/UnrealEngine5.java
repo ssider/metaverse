@@ -7,14 +7,14 @@ public class UnrealEngine5 {
     /**
      * 对象路径
      */
-    @Excel(name = "对象路径")
-    private String objectPath;
+//    @Excel(name = "对象路径")
+//    private String objectPath;
 
     /**
      * 函数名
      */
-    @Excel(name = "函数名")
-    private String functionName;
+//    @Excel(name = "函数名")
+//    private String functionName;
     /**
      * 任务id
      */
@@ -41,21 +41,21 @@ public class UnrealEngine5 {
     @Excel(name = "生成交易")
     private Boolean generateTransaction;
 
-    public String getObjectPath() {
-        return objectPath;
-    }
-
-    public void setObjectPath(String objectPath) {
-        this.objectPath = objectPath;
-    }
-
-    public String getFunctionName() {
-        return functionName;
-    }
-
-    public void setFunctionName(String functionName) {
-        this.functionName = functionName;
-    }
+//    public String getObjectPath() {
+//        return objectPath;
+//    }
+//
+//    public void setObjectPath(String objectPath) {
+//        this.objectPath = objectPath;
+//    }
+//
+//    public String getFunctionName() {
+//        return functionName;
+//    }
+//
+//    public void setFunctionName(String functionName) {
+//        this.functionName = functionName;
+//    }
 
     public TaskNumber getParameters() {
         return parameters;
@@ -100,8 +100,8 @@ public class UnrealEngine5 {
     @Override
     public String toString() {
         return "UnrealEngine5{" +
-                "objectPath='" + objectPath + '\'' +
-                ", functionName='" + functionName + '\'' +
+//                "objectPath='" + objectPath + '\'' +
+//                ", functionName='" + functionName + '\'' +
                 ", parameters=" + parameters +
                 ", fileName='" + fileName + '\'' +
                 ", filePath='" + filePath + '\'' +

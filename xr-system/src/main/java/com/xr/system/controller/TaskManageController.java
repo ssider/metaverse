@@ -89,9 +89,11 @@ public class TaskManageController extends BaseController {
     public AjaxResult add(@RequestBody TaskManage taskManage) {
         int result = taskManageService.insertTaskManage(taskManage);
         if (result == PARENTNOTFOUND) {
-            return error("parent task not exist, please refresh");
+//            return error("parent task not exist, please refresh");
+            return success("parent task not exist, please refresh");
         } else if (result == UNREALTASKERROR) {
-            return error("send and create unrealEngine5 error");
+            return success("send and create unrealEngine5 error");
+//            return error("send and create unrealEngine5 error");
         }
         return toAjax(result);
     }
@@ -115,8 +117,19 @@ public class TaskManageController extends BaseController {
     public AjaxResult remove(@PathVariable String[] taskNumbers) {
         int del = taskManageService.deleteTaskManageByTaskNumbers(taskNumbers);
         if (del == UNREALTASKERROR) {
-            return error("delete unrealEngine5 error");
+            return success("delete unrealEngine5 error");
+//            return error("delete unrealEngine5 error");
         }
         return toAjax(del);
+    }
+
+    /**
+     * 更新任务管理
+     */
+    @PreAuthorize("@ss.hasPermi('system:manage:query')")
+    @DeleteMapping("/unreal/{taskNumber}/{processPercent}")
+    public AjaxResult unrealTask(@PathVariable String taskNumber, @PathVariable String processPercent) {
+        System.out.println("taskNumber==" + taskNumber + " processPercent====" + processPercent);
+        return toAjax(1);
     }
 }

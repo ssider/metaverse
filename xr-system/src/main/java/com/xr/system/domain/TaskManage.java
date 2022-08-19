@@ -5,11 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.xr.common.annotation.Excel;
 import com.xr.common.core.domain.BaseEntity;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 任务管理对象 task_manage
@@ -101,16 +98,28 @@ public class TaskManage extends BaseEntity {
     private String unrealTask;
 
     /**
-     * 详情百分比
+     * 详情百分比A
      */
-    @Excel(name = "详情百分比")
-    private String levelDetail;
+    @Excel(name = "详情百分比A")
+    private Long levelDetailA;
+
+    /**
+     * 详情百分比B
+     */
+    @Excel(name = "详情百分比B")
+    private Long levelDetailB;
+
+    /**
+     * 详情百分比C
+     */
+    @Excel(name = "详情百分比C")
+    private Long levelDetailC;
 
     /**
      * 图片源
      */
-    @Excel(name = "图片源", readConverterExp = "$column.readConverterExp()")
-    private String view;
+    @Excel(name = "图片源")
+    private String images;
 
     /**
      * 修改时间
@@ -142,8 +151,10 @@ public class TaskManage extends BaseEntity {
         this.dataSource = manage.dataSource;
         this.taskContent = manage.taskContent;
         this.unrealTask = manage.unrealTask;
-        this.levelDetail = manage.levelDetail;
-        this.view = manage.view;
+        this.levelDetailA = manage.levelDetailA;
+        this.levelDetailB = manage.levelDetailB;
+        this.levelDetailC = manage.levelDetailC;
+        this.images = manage.images;
         this.modifyTime = manage.modifyTime;
         this.createTime = manage.createTime;
         this.children = manage.getChildren().stream().map(TaskManage::new).collect(Collectors.toList());
@@ -253,20 +264,36 @@ public class TaskManage extends BaseEntity {
         return unrealTask;
     }
 
-    public void setLevelDetail(String levelDetail) {
-        this.levelDetail = levelDetail;
+    public void setLevelDetailA(Long levelDetailA) {
+        this.levelDetailA = levelDetailA;
     }
 
-    public String getLevelDetail() {
-        return levelDetail;
+    public Long getLevelDetailA() {
+        return levelDetailA;
     }
 
-    public void setView(String view) {
-        this.view = view;
+    public void setLevelDetailB(Long levelDetailB) {
+        this.levelDetailB = levelDetailB;
     }
 
-    public String getView() {
-        return view;
+    public Long getLevelDetailB() {
+        return levelDetailB;
+    }
+
+    public void setLevelDetailC(Long levelDetailC) {
+        this.levelDetailC = levelDetailC;
+    }
+
+    public Long getLevelDetailC() {
+        return levelDetailC;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
+    }
+
+    public String getImages() {
+        return images;
     }
 
     public void setModifyTime(Date modifyTime) {
@@ -297,24 +324,27 @@ public class TaskManage extends BaseEntity {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("taskNumber", getTaskNumber())
-                .append("parentNumber", getParentNumber())
-                .append("projectName", getProjectName())
-                .append("projectInfomation", getProjectInfomation())
-                .append("taskName", getTaskName())
-                .append("sourceSystem", getSourceSystem())
-                .append("sourcePath", getSourcePath())
-                .append("targetSystem", getTargetSystem())
-                .append("taskProcess", getTaskProcess())
-                .append("taskStatus", getTaskStatus())
-                .append("dataSource", getDataSource())
-                .append("taskContent", getTaskContent())
-                .append("unrealTask", getUnrealTask())
-                .append("levelDetail", getLevelDetail())
-                .append("view", getView())
-                .append("createTime", getCreateTime())
-                .append("modifyTime", getModifyTime())
-                .toString();
+        return "TaskManage{" +
+                "taskNumber='" + taskNumber + '\'' +
+                ", parentNumber='" + parentNumber + '\'' +
+                ", projectName='" + projectName + '\'' +
+                ", projectInfomation='" + projectInfomation + '\'' +
+                ", taskName='" + taskName + '\'' +
+                ", sourceSystem='" + sourceSystem + '\'' +
+                ", sourcePath='" + sourcePath + '\'' +
+                ", targetSystem='" + targetSystem + '\'' +
+                ", taskProcess=" + taskProcess +
+                ", taskStatus='" + taskStatus + '\'' +
+                ", dataSource='" + dataSource + '\'' +
+                ", taskContent='" + taskContent + '\'' +
+                ", unrealTask='" + unrealTask + '\'' +
+                ", levelDetailA=" + levelDetailA +
+                ", levelDetailB=" + levelDetailB +
+                ", levelDetailC=" + levelDetailC +
+                ", images='" + images + '\'' +
+                ", modifyTime=" + modifyTime +
+                ", createTime=" + createTime +
+                ", children=" + children +
+                '}';
     }
 }

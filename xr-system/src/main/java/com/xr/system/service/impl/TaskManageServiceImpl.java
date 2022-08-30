@@ -81,15 +81,6 @@ public class TaskManageServiceImpl implements ITaskManageService {
         if (null == taskManage.getTaskProcess() || taskManage.getTaskProcess() <= 0) {
             taskManage.setTaskProcess(0L);
         }
-        if (taskManage.getLevelDetailA() <= 0) {
-            taskManage.setLevelDetailA(30l);
-        }
-        if (taskManage.getLevelDetailB() <= 0) {
-            taskManage.setLevelDetailB(50l);
-        }
-        if (taskManage.getLevelDetailC() <= 0) {
-            taskManage.setLevelDetailC(70l);
-        }
         taskManage.setModifyTime(DateUtils.getNowDate());
         int ins = taskManageMapper.insertTaskManage(taskManage);
         if (ins > 0) {
@@ -102,10 +93,10 @@ public class TaskManageServiceImpl implements ITaskManageService {
             unreal.setFileName("FileName.js");
             unreal.setFilePath("/home/data/models");
             String dl = "";
-            if (taskManage.getLevelDetailA() > 0) {
+            if (taskManage.getLevelDetailA() >= 0) {
                 dl += taskManage.getLevelDetailA();
             }
-            if (taskManage.getLevelDetailB() > 0) {
+            if (taskManage.getLevelDetailB() >= 0) {
                 if (StringUtils.isEmpty(dl)) {
                     dl += taskManage.getLevelDetailB();
                 } else {
@@ -113,7 +104,7 @@ public class TaskManageServiceImpl implements ITaskManageService {
                 }
 
             }
-            if (taskManage.getLevelDetailC() > 0) {
+            if (taskManage.getLevelDetailC() >= 0) {
                 if (StringUtils.isEmpty(dl)) {
                     dl += taskManage.getLevelDetailC();
                 } else {
@@ -128,19 +119,21 @@ public class TaskManageServiceImpl implements ITaskManageService {
             String url = UNREALHTTP + "/remote/object/call";
             String rspStr = HttpUtils.sendPost(url, JSONObject.toJSONString(unreal));
             JSONObject obj = JSON.parseObject(rspStr);
-            String respCode = obj.getString("code");
-            if (StringUtils.isEmpty(rspStr) || StringUtils.isEmpty(respCode) || !respCode.equals("200")) {
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
-                return UNREALTASKERROR;
+            if (StringUtils.isNotEmpty(obj)) {
+                String respCode = obj.getString("code");
+                if (StringUtils.isEmpty(rspStr) || StringUtils.isEmpty(respCode) || !respCode.equals("200")) {
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    System.out.println("respCode==" + respCode + "send unreal error====" + rspStr.toString());
+                    return UNREALTASKERROR;
+                }
             }
         }
 
@@ -185,19 +178,21 @@ public class TaskManageServiceImpl implements ITaskManageService {
                 String url = UNREALHTTP + "/unreal/" + t;
                 String rspStr = HttpUtils.sendGet(url);
                 JSONObject obj = JSON.parseObject(rspStr);
-                String respCode = obj.getString("code");
-                if (StringUtils.isEmpty(rspStr) || StringUtils.isEmpty(respCode) || !respCode.equals("200")) {
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
-                    return UNREALTASKERROR;
+                if (StringUtils.isNotEmpty(obj)) {
+                    String respCode = obj.getString("code");
+                    if (StringUtils.isEmpty(rspStr) || StringUtils.isEmpty(respCode) || !respCode.equals("200")) {
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        System.out.println("respCode==" + respCode + "send delete tasknumber=" + t + " error====" + rspStr.toString());
+                        return UNREALTASKERROR;
+                    }
                 }
             }
         }
